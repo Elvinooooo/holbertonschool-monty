@@ -8,6 +8,8 @@ void pall(stack_t **stack)
 {
 	stack_t *current = *stack;
 
+	if (current == NULL)
+		return;
 	while (current)
 	{
 		printf("%d\n", current->n);
