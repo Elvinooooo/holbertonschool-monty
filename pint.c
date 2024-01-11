@@ -10,7 +10,7 @@
 
 void pint(stack_t **stack, unsigned int line_number, FILE *file, char *line)
 {
-	if (*stack == NULL)
+	if (stack == NULL || *stack == NULL)
 	{
 		fprintf(stderr, "L%u: can't pint, stack empty\n", line_number);
 		fclose(file);

@@ -1,4 +1,21 @@
 #include "monty.h"
+
+/**
+ * report_push_error - Function to report push error and exit
+ * @line_number: Line number in the Monty file
+ * @file: File being processed
+ * @line: Current line being processed
+ * @stack: Stack being operated on
+ */
+void push_error(unsigned int line_number, FILE *file,
+				char *line, stack_t **stack)
+{
+	fprintf(stderr, "L%u: usage: push integer\n", line_number);
+	fclose(file);
+	free(line);
+	free_stack(stack);
+	exit(EXIT_FAILURE);
+}
 /**
 * process_file -  Function that processes the codes in .m file
 * @file: the opened file
@@ -15,6 +32,8 @@ void process_file(FILE *file, stack_t **stack)
 	while (getline(&line, &line_size, file) != -1)
 	{
 		line_number++;
+		if (line[0] == '#')
+			continue;
 		char *token = strtok(line, " \t\n\r");
 
 		if (token != NULL)
@@ -28,18 +47,14 @@ void process_file(FILE *file, stack_t **stack)
 					push(stack, value);
 				}
 				else
-				{
-					fprintf(stderr, "L%u: usage: push integer\n", line_number);
-					fclose(file);
-					free(line);
-					free_stack(stack);
-					exit(EXIT_FAILURE);
-				}
+					push_error(line_number, file, line, stack);
 			}
 			else if (strcmp(token, "pall") == 0)
 				pall(stack);
 			else if (strcmp(token, "pint") == 0)
 				pint(stack, line_number, file, line);
+			else if (strcmp(token, "pop") == 0)
+				pop(stack, line_number);
 			else
 			{
 				fprintf(stderr, "L%u: unknown instruction %s\n", line_number, line);
