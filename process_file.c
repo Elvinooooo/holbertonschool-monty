@@ -17,6 +17,48 @@ void push_error(unsigned int line_number, FILE *file,
 	exit(EXIT_FAILURE);
 }
 /**
+ * execute_opcode - Executes the specified Monty opcode.
+ * @token: The opcode token to execute.
+ * @stack: Pointer to the stack.
+ * @line_number: Current line number in the Monty file.
+ * @file: Pointer to the Monty file being processed.
+ * @line: Current line being processed.
+ */
+void execute_opcode(char *token, stack_t **stack, unsigned int line_number,
+					FILE *file, char *line)
+{
+	if (strcmp(token, "push") == 0)
+	{
+		token = strtok(NULL, " \t\n\r");
+		if (token != NULL)
+		{
+			push(stack, atoi(token));
+		}
+		else
+		{
+			push_error(line_number, file, line, stack);
+		}
+	}
+	else if (strcmp(token, "pall") == 0)
+		pall(stack);
+	else if (strcmp(token, "pint") == 0)
+		pint(stack, line_number, file, line);
+	else if (strcmp(token, "pop") == 0)
+		pop(stack, line_number);
+	else if (strcmp(token, "swap") == 0)
+		swap(stack, line_number);
+	else if (strcmp(token, "add") == 0)
+		add(stack, line_number);
+	else if (strcmp(token, "nop") == 0)
+		nop(stack, line_number);
+	else
+	{
+		fprintf(stderr, "L%u: unknown instruction %s\n", line_number, line);
+		exit(EXIT_FAILURE);
+	}
+}
+
+/**
 * process_file -  Function that processes the codes in .m file
 * @file: the opened file
 * @stack: the actual stack
@@ -26,7 +68,6 @@ void process_file(FILE *file, stack_t **stack)
 {
 	char *line = NULL;
 	size_t line_size = 0;
-	int value;
 	unsigned int line_number = 0;
 
 	while (getline(&line, &line_size, file) != -1)
@@ -37,31 +78,7 @@ void process_file(FILE *file, stack_t **stack)
 		char *token = strtok(line, " \t\n\r");
 
 		if (token != NULL)
-		{
-			if (strcmp(token, "push") == 0)
-			{
-				token = strtok(NULL, " \t\n\r");
-				if (token != NULL)
-				{
-					value = atoi(token);
-					push(stack, value);
-				}
-				else
-					push_error(line_number, file, line, stack);
-			}
-			else if (strcmp(token, "pall") == 0)
-				pall(stack);
-			else if (strcmp(token, "pint") == 0)
-				pint(stack, line_number, file, line);
-			else if (strcmp(token, "pop") == 0)
-				pop(stack, line_number);
-			else if (strcmp(token, "swap") == 0)
-				swap(stack, line_number);
-			else
-			{
-				fprintf(stderr, "L%u: unknown instruction %s\n", line_number, line);
-				exit(EXIT_FAILURE);
-			}
-		}
+			execute_opcode(token, stack, line_number, file, line);
 	}
+	free(line);
 }
