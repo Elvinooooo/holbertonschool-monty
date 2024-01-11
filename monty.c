@@ -1,23 +1,29 @@
 #include "monty.h"
 /**
- * main - Monty interpreter main function
- * @argc: Argument count
- * @argv: Argument vector
- * Return: 0 on success, EXIT_FAILURE on failure
- */
-// Add this function to monty.c
+* free_stack - function that frees the stack
+* @stack: the stack to bee freed
+* Return: Nothing
+*/
 void free_stack(stack_t **stack)
 {
 	stack_t *current = *stack;
+
 	while (current != NULL)
 	{
 		stack_t *temp = current;
+
 		current = current->next;
 		free(temp);
 	}
 	*stack = NULL;
 }
 
+/**
+* main - The main function
+* @argc: Argument count
+* @argv: Argument vector
+* Return: 0 on success, EXIT_FAILURE on failure
+*/
 int main(int argc, char *argv[])
 {
 	if (argc != 2)
@@ -35,16 +41,35 @@ int main(int argc, char *argv[])
 
 	stack_t *stack = NULL;
 	char *line = NULL;
-	size_t len = 0;
-	unsigned int line_number = 0;
+	size_t line_size = 0;
+	int value;
 
-	while (getline(&line, &len, file) != -1)
+	while (getline(&line, &line_size, file) != -1)
 	{
-		line_number++;
-		parse_line(file, &stack, line_number);
+		char *token = strtok(line, " \t\n\r");
+
+		if (token != NULL && strcmp(token, "push") == 0)
+		{
+			token = strtok(NULL, " \t\n\r");
+			if (token != NULL)
+			{
+				value = atoi(token);
+				push(&stack, value);
+			}
+			else
+			{
+				fprintf(stderr, "Error: Invalid push command: %s", line);
+				fclose(file);
+				free(line);
+				free_stack(&stack);
+				exit(EXIT_FAILURE);
+			}
+		}
+		else if (strcmp(token, "pall") == 0)
+			pall(&stack);
 	}
-	free_stack(&stack);
-	free(line);
 	fclose(file);
+	free(line);
+	free_stack(&stack);
 	return (0);
 }

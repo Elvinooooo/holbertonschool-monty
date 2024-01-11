@@ -1,11 +1,8 @@
 #include "monty.h"
 /**
- * pall - Prints all values on the stack
- * @stack: Double pointer to the head of the stack
- * @line_number: Line number in the Monty byte code file
- *
- * Description: Traverses the stack and prints the integer value of each
- * element on a new line. The traversal starts from the top of the stack.
+ * pall - Prints the values on the stack followed by a new line
+ * @stack: Pointer to the stack
+ * Return: Nothing
  */
 void pall(stack_t **stack)
 {
