@@ -55,6 +55,8 @@ void process_file(FILE *file, stack_t **stack)
 				pint(stack, line_number, file, line);
 			else if (strcmp(token, "pop") == 0)
 				pop(stack, line_number);
+			else if (strcmp(token, "swap") == 0)
+				swap(stack, line_number);
 			else
 			{
 				fprintf(stderr, "L%u: unknown instruction %s\n", line_number, line);
