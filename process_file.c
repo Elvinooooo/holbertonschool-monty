@@ -69,13 +69,14 @@ void process_file(FILE *file, stack_t **stack)
 	char *line = NULL;
 	size_t line_size = 0;
 	unsigned int line_number = 0;
+	char *token;
 
 	while (getline(&line, &line_size, file) != -1)
 	{
 		line_number++;
 		if (line[0] == '#')
 			continue;
-		char *token = strtok(line, " \t\n\r");
+		token = strtok(line, " \t\n\r");
 
 		if (token != NULL)
 			execute_opcode(token, stack, line_number, file, line);
