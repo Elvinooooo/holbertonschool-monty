@@ -6,6 +6,8 @@
  */
 void pall(stack_t **stack)
 {
+	if (*stack == NULL)
+		return;
 	stack_t *current = *stack;
 
 	while (current)
