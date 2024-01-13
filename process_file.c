@@ -16,6 +16,7 @@ void push_error(unsigned int line_number, FILE *file,
 	free_stack(stack);
 	exit(EXIT_FAILURE);
 }
+
 /**
  * execute_opcode - Executes the specified Monty opcode.
  * @token: The opcode token to execute.
@@ -25,37 +26,37 @@ void push_error(unsigned int line_number, FILE *file,
  * @line: Current line being processed.
  */
 void execute_opcode(char *token, stack_t **stack, unsigned int line_number,
-					FILE *file, char *line)
+                    FILE *file, char *line)
 {
-	if (strcmp(token, "push") == 0)
-	{
-		token = strtok(NULL, " \t\n\r");
-		if (token != NULL)
-		{
-			push(stack, atoi(token));
-		}
-		else
-		{
-			push_error(line_number, file, line, stack);
-		}
-	}
-	else if (strcmp(token, "pall") == 0)
-		pall(stack);
-	else if (strcmp(token, "pint") == 0)
-		pint(stack, line_number, file, line);
-	else if (strcmp(token, "pop") == 0)
-		pop(stack, line_number);
-	else if (strcmp(token, "swap") == 0)
-		swap(stack, line_number);
-	else if (strcmp(token, "add") == 0)
-		add(stack, line_number);
-	else if (strcmp(token, "nop") == 0)
-		nop(stack, line_number);
-	else
-	{
-		fprintf(stderr, "L%u: unknown instruction %s\n", line_number, line);
-		exit(EXIT_FAILURE);
-	}
+    if (strcmp(token, "push") == 0)
+    {
+        token = strtok(NULL, " \t\n\r");
+        if (token != NULL)
+        {
+            push(stack, atoi(token));
+        }
+        else
+        {
+            push_error(line_number, file, line, stack);
+        }
+    }
+    else if (strcmp(token, "pall") == 0)
+        pall(stack);
+    else if (strcmp(token, "pint") == 0)
+        pint(stack, line_number);
+    else if (strcmp(token, "pop") == 0)
+        pop(stack, line_number);
+    else if (strcmp(token, "swap") == 0)
+        swap(stack, line_number);
+    else if (strcmp(token, "add") == 0)
+        add(stack, line_number);
+    else if (strcmp(token, "nop") == 0)
+        nop(stack, line_number);
+    else
+    {
+        fprintf(stderr, "L%u: unknown instruction %s\n", line_number, line);
+        exit(EXIT_FAILURE);
+    }
 }
 
 /**
@@ -66,20 +67,20 @@ void execute_opcode(char *token, stack_t **stack, unsigned int line_number,
 */
 void process_file(FILE *file, stack_t **stack)
 {
-	char *line = NULL;
-	size_t line_size = 0;
-	unsigned int line_number = 0;
-	char *token;
+    char *opcode, *token = NULL;
+    size_t size = 0;
+    int counter = 0;
 
-	while (getline(&line, &line_size, file) != -1)
-	{
-		line_number++;
-		if (line[0] == '#')
-			continue;
-		token = strtok(line, " \t\n\r");
+    while (getline(&opcode, &size, file) != -1)
+    {
+        counter++;
+        token = strtok(opcode, "\n\t\r ");
+        if (token == NULL || *token == '#')
+            continue;
 
-		if (token != NULL)
-			execute_opcode(token, stack, line_number, file, line);
-	}
-	free(line);
+        execute_opcode(token, stack, counter, file, opcode);
+    }
+
+    free(opcode);
 }
+

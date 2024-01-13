@@ -37,7 +37,7 @@ typedef struct instruction_s
 void free_stack(stack_t **stack);
 void push(stack_t **stack, int value);
 void pall(stack_t **stack);
-void pint(stack_t **stack, unsigned int line_number, FILE *file, char *line);
+void pint(stack_t **stack, unsigned int line);
 void process_file(FILE *file, stack_t **stack);
 void pop(stack_t **stack, unsigned int line_number);
 void swap(stack_t **stack, unsigned int line_number);
