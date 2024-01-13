@@ -7,8 +7,6 @@
  */
 void push(stack_t **stack, int value)
 {
-    printf("DEBUG: Pushing value: %d\n", value);  // Debugging output
-
     stack_t *new_node = malloc(sizeof(stack_t));
     if (new_node == NULL)
     {
