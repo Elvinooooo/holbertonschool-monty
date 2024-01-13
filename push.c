@@ -13,6 +13,7 @@ void push(stack_t **stack, int value)
         fprintf(stderr, "Error: malloc failed\n");
         exit(EXIT_FAILURE);
     }
+	
     new_node->n = value;
     new_node->prev = NULL;
 
