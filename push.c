@@ -7,25 +7,26 @@
  */
 void push(stack_t **stack, int value)
 {
-	stack_t *new_node;
+    printf("DEBUG: Pushing value: %d\n", value);  // Debugging output
 
-	new_node = malloc(sizeof(stack_t));
-	if (new_node == NULL)
-	{
-		fprintf(stderr, "Error: malloc failed\n");
-		exit(EXIT_FAILURE);
-	}
-	new_node->n = value;
-	new_node->prev = NULL;
-	if (*stack == NULL)  /* validate if empty stack */
-	{
-		new_node->next = NULL;
-		*stack = new_node;
-	}
-	else
-		new_node->next = *stack;
+    stack_t *new_node = malloc(sizeof(stack_t));
+    if (new_node == NULL)
+    {
+        fprintf(stderr, "Error: malloc failed\n");
+        exit(EXIT_FAILURE);
+    }
+    new_node->n = value;
+    new_node->prev = NULL;
 
-	if (*stack)
-		(*stack)->prev = new_node;
-	*stack = new_node;
+    if (*stack == NULL)
+    {
+        new_node->next = NULL;
+        *stack = new_node;
+    }
+    else
+    {
+        new_node->next = *stack;
+        (*stack)->prev = new_node;
+        *stack = new_node;
+    }
 }

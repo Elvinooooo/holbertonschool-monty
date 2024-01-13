@@ -28,6 +28,8 @@ void push_error(unsigned int line_number, FILE *file,
 void execute_opcode(char *token, stack_t **stack, unsigned int line_number,
                     FILE *file, char *line)
 {
+    printf("DEBUG: Executing opcode: %s\n", token);  // Debugging output
+
     if (strcmp(token, "push") == 0)
     {
         token = strtok(NULL, " \t\n\r");

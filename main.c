@@ -1,5 +1,12 @@
 #include "monty.h"
 
+/**
+ * main - Monty bite code files interpreter
+ * @argc: Argument counter
+ * @argv: Argument vector
+ *
+ * Return: Void
+ */
 int main(int argc, char *argv[])
 {
     stack_t *stack = NULL;
